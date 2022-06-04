@@ -6,7 +6,13 @@ import java.nio.file.Paths
 
 object Yellow {
 
-  const val PROMPT = "yellow|>>> "
+  // ================== Data =======================
+  private var err = false
+  private var runtimeErr = false
+
+  private const val PROMPT = "yellow|>>> "
+
+  // ================= Public Methods ======================
 
   public fun runFile(path: String) {
     val bytes = Files.readAllBytes(Paths.get(path))
@@ -26,7 +32,21 @@ object Yellow {
   }
 
   private fun run(source: String) {
-    println("Running the source: " + source)
+    val scanner = Scanner(source)
+    val tokens = scanner.scan()
+    for (token in tokens) {
+      println(token)
+    }
+  }
+
+  public fun error(line: Int, message: String) {
+    reportError(line, "", message)
+  }
+
+  // =============== Private Methods =====================
+
+  private fun reportError(line: Int, pos: String, message: String) {
+    println("ERROR $pos: $message - [line:$line]")
   }
 }
 
