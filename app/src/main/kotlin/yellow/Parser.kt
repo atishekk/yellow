@@ -135,6 +135,7 @@ class Parser(val tokens: List<Token>) {
     if (match(PRINT)) return printStatement()
     if (match(RETURN)) return returnStatement()
     if (match(WHILE)) return whileStatement()
+    if (match(LEFT_BRACE)) return Stmt.Block(block())
     return expressionStatement()
   }
 
