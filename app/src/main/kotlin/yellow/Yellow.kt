@@ -36,9 +36,16 @@ object Yellow {
   private fun run(source: String) {
     val scanner = Scanner(source)
     val tokens = scanner.scan()
-    for (token in tokens) {
-      println(token)
-    }
+    // for (token in tokens) {
+    //   println(token)
+    // }
+    val parser = Parser(tokens)
+    val statements = parser.parse()
+    if (err) return
+    // for (stmt in statements) {
+    //   println(stmt)
+    // }
+    println("Parsed successfully")
   }
 
   public fun error(line: Int, message: String) {
@@ -55,6 +62,7 @@ object Yellow {
   // =============== Private Methods =====================
 
   private fun reportError(line: Int, pos: String, message: String) {
+    // Thread.dumpStack()
     println("ERROR $pos: $message - [line:$line]")
   }
 }

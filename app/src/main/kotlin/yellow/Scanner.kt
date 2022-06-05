@@ -3,7 +3,7 @@ package yellow
 import yellow.TokenType.*
 
 class Scanner(private val source: String) {
-  val tokens = mutableListOf<Token>()
+  private val tokens = mutableListOf<Token>()
   private var start = 0
   private var current = 0
   private var line = 1

@@ -1,0 +1,3 @@
+package yellow
+
+class Interpreter {}
