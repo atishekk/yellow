@@ -1,3 +1,5 @@
 package yellow
 
-class Interpreter {}
+class Interpreter {
+  fun resolve(expr: Expr, distance: Int) {}
+}

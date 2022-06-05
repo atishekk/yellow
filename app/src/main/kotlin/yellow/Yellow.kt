@@ -11,6 +11,7 @@ object Yellow {
   private var runtimeErr = false
 
   private const val PROMPT = "yellow|>>> "
+  private val interpreter = Interpreter()
 
   // ================= Public Methods ======================
 
@@ -41,11 +42,19 @@ object Yellow {
     // }
     val parser = Parser(tokens)
     val statements = parser.parse()
+
     if (err) return
     // for (stmt in statements) {
     //   println(stmt)
     // }
-    println("Parsed successfully")
+    println("Parsing successful")
+
+    val staticAnalysis = StaticAnalysis(interpreter)
+    staticAnalysis.resolve(statements)
+
+    if (err) return
+
+    println("Static Analysis successful")
   }
 
   public fun error(line: Int, message: String) {
@@ -55,7 +64,7 @@ object Yellow {
 
   public fun error(tkn: Token, msg: String) {
     if (tkn.type == TokenType.EOF) reportError(tkn.line, " at end", msg)
-    else reportError(tkn.line, " at '" + tkn.lexeme + "'", msg)
+    else reportError(tkn.line, " at '${tkn.lexeme}'", msg)
     err = true
   }
 
