@@ -129,6 +129,7 @@ class Parser(val tokens: List<Token>) {
   // statement -> forStatement | ifStatement | printStatement | returnStatement
   //              | whileStatement
   //              | expressionStatement
+  //              | blockStatement
   private fun statement(): Stmt {
     if (match(FOR)) return forStatement()
     if (match(IF)) return ifStatement()
