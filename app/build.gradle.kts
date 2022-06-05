@@ -42,3 +42,5 @@ application {
 }
 
 tasks.named<JavaExec>("run") { standardInput = System.`in` }
+
+application.applicationName = "yellow"
