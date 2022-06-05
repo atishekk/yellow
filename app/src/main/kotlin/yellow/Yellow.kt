@@ -18,6 +18,7 @@ object Yellow {
     val bytes = Files.readAllBytes(Paths.get(path))
     val source = String(bytes, Charset.defaultCharset())
     run(source)
+    if (err) System.exit(65)
   }
 
   public fun runPrompt() {
@@ -28,6 +29,7 @@ object Yellow {
         null -> break
         else -> run(line)
       }
+      err = false
     }
   }
 
@@ -41,6 +43,13 @@ object Yellow {
 
   public fun error(line: Int, message: String) {
     reportError(line, "", message)
+    err = true
+  }
+
+  public fun error(tkn: Token, msg: String) {
+    if (tkn.type == TokenType.EOF) reportError(tkn.line, " at end", msg)
+    else reportError(tkn.line, " at '" + tkn.lexeme + "'", msg)
+    err = true
   }
 
   // =============== Private Methods =====================
