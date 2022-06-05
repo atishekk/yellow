@@ -6,15 +6,13 @@ import java.nio.file.Paths
 
 object Yellow {
 
-  // ================== Data =======================
   private var err = false
   private var runtimeErr = false
 
   private const val PROMPT = "yellow|>>> "
   private val interpreter = Interpreter()
 
-  // ================= Public Methods ======================
-
+  // run a script file: exits the interpreter in case of an error
   public fun runFile(path: String) {
     val bytes = Files.readAllBytes(Paths.get(path))
     val source = String(bytes, Charset.defaultCharset())
@@ -22,6 +20,7 @@ object Yellow {
     if (err) System.exit(65)
   }
 
+  // interactive prompt
   public fun runPrompt() {
     while (true) {
       print(PROMPT)
@@ -34,6 +33,7 @@ object Yellow {
     }
   }
 
+  // interpreter entrypoint
   private fun run(source: String) {
     val scanner = Scanner(source)
     val tokens = scanner.scan()
@@ -57,6 +57,7 @@ object Yellow {
     println("Static Analysis successful")
   }
 
+  // =========== Error Handling ==================
   public fun error(line: Int, message: String) {
     reportError(line, "", message)
     err = true
@@ -67,8 +68,6 @@ object Yellow {
     else reportError(tkn.line, " at '${tkn.lexeme}'", msg)
     err = true
   }
-
-  // =============== Private Methods =====================
 
   private fun reportError(line: Int, pos: String, message: String) {
     // Thread.dumpStack()
