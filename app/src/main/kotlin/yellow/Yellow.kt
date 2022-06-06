@@ -18,6 +18,7 @@ object Yellow {
     val source = String(bytes, Charset.defaultCharset())
     run(source)
     if (err) System.exit(65)
+    if (runtimeErr) System.exit(70)
   }
 
   // interactive prompt
@@ -47,14 +48,16 @@ object Yellow {
     // for (stmt in statements) {
     //   println(stmt)
     // }
-    println("Parsing successful")
+    // println("Parsing successful")
 
     val staticAnalysis = StaticAnalysis(interpreter)
     staticAnalysis.resolve(statements)
 
     if (err) return
 
-    println("Static Analysis successful")
+    // println("Static Analysis successful")
+
+    interpreter.interpret(statements)
   }
 
   // =========== Error Handling ==================
@@ -67,6 +70,11 @@ object Yellow {
     if (tkn.type == TokenType.EOF) reportError(tkn.line, " at end", msg)
     else reportError(tkn.line, " at '${tkn.lexeme}'", msg)
     err = true
+  }
+
+  public fun runtimError(error: RuntimeError) {
+    println("${error.message} - [line: ${error.token.line}]")
+    runtimeErr = true
   }
 
   private fun reportError(line: Int, pos: String, message: String) {
