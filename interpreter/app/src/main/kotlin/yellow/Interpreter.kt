@@ -57,13 +57,28 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
   // - Create method objects and create the class object
   // - Assign the class name the class object
   override fun visitClassStmt(stmt: Stmt.Class) {
+    var superclass: Any? = null
+    stmt.superclass?.let {
+      superclass = evaluate(stmt.superclass)
+      if (superclass !is YellowClass) {
+        throw RuntimeError(stmt.superclass.name, "Superclass must be a class")
+      }
+    }
+
     environment.define(stmt.name.lexeme, null)
+
+    stmt.superclass?.let {
+      environment = Environment(environment)
+      environment.define("super", superclass)
+    }
+
     val methods = mutableMapOf<String, YellowFunction>()
     stmt.methods.forEach { method ->
-      val function = YellowFunction(method, environment)
+      val function = YellowFunction(method, environment, method.name.lexeme.equals("init"))
       methods[method.name.lexeme] = function
     }
-    val cls = YellowClass(stmt.name.lexeme, methods)
+    val cls = YellowClass(stmt.name.lexeme, methods, null)
+    stmt.superclass?.let { environment = environment.enclosing!! }
     environment.assign(stmt.name, cls)
   }
 
@@ -75,7 +90,7 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
   // - create a function object
   // - bind the name to the object in the current env
   override fun visitFunctionStmt(stmt: Stmt.Function) {
-    val function = YellowFunction(stmt, environment)
+    val function = YellowFunction(stmt, environment, false)
     environment.define(stmt.name.lexeme, function)
   }
 
@@ -226,6 +241,17 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     } else {
       throw RuntimeError(expr.name, "Only instances have fields")
     }
+  }
+
+  override fun visitSuperExpr(expr: Expr.Super): Any? {
+    val distance = locals[expr]!!
+    val superclass = environment.getAt(distance, "super") as YellowClass
+    val obj = environment.getAt(distance - 1, "this") as YellowInstance
+    val method = superclass.findMethod(expr.method.lexeme)
+    method?.let {
+      return method.bind(obj)
+    }
+    throw RuntimeError(expr.method, "Undefined property '${expr.method.lexeme}'.")
   }
 
   override fun visitThisExpr(expr: Expr.This): Any? {

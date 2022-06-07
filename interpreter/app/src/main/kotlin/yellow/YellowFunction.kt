@@ -3,9 +3,16 @@ package yellow
 class Return(val value: Any?) : RuntimeException(null, null, false, false) {}
 
 class YellowFunction(
-    val function: Stmt.Function,
-    val closure: Environment,
+    private val function: Stmt.Function,
+    private val closure: Environment,
+    private val initialiser: Boolean
 ) : YellowCallable {
+
+  fun bind(instance: YellowInstance): YellowFunction {
+    val environment = Environment(closure)
+    environment.define("this", instance)
+    return YellowFunction(function, environment, initialiser)
+  }
 
   override fun arity(): Int {
     return function.params.size
@@ -22,9 +29,11 @@ class YellowFunction(
     try {
       interpreter.executeBlock(function.body, environment)
     } catch (returnVal: Return) {
+      if (initialiser) return closure.getAt(0, "this")
       return returnVal.value
     }
 
+    if (initialiser) return closure.getAt(0, "this")
     // No value returned
     return null
   }

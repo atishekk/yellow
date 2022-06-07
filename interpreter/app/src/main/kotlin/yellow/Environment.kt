@@ -4,12 +4,12 @@ class Environment(val enclosing: Environment? = null) {
   val values = mutableMapOf<String, Any?>()
 
   fun define(name: String, value: Any?) {
-    values.put(name, value)
+    values[name] = value
   }
 
   fun assign(name: Token, value: Any?) {
     if (values.containsKey(name.lexeme)) {
-      values.put(name.lexeme, value)
+      values[name.lexeme] = value
       return
     }
     enclosing?.let { enclosing.assign(name, value) }

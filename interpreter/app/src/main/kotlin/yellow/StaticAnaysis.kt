@@ -8,7 +8,8 @@ class StaticAnalysis(val interpreter: Interpreter) : Expr.Visitor<Unit>, Stmt.Vi
 
     private enum class ClassScope {
       NONE,
-      CLASS
+      CLASS,
+      SUBCLASS
     }
 
     private enum class FunctionScope {
@@ -55,12 +56,25 @@ class StaticAnalysis(val interpreter: Interpreter) : Expr.Visitor<Unit>, Stmt.Vi
     curClassScope = ClassScope.CLASS
     declare(stmt.name)
     define(stmt.name)
+
+    if (stmt.superclass != null && stmt.name.lexeme.equals(stmt.superclass.name.lexeme)) {
+      Yellow.error(stmt.superclass.name, "A class can't inherit from itself")
+    }
+
+    stmt.superclass?.let { it ->
+      curClassScope = ClassScope.SUBCLASS
+      resolve(it)
+      beginScope()
+      scopes.peek().put("super", true)
+    }
+
     beginScope()
     scopes.peek()["this"] = true
     for (method in stmt.methods) {
       resolveFunction(method, FunctionScope.METHOD)
     }
     endScope()
+    stmt.superclass?.let { endScope() }
     curClassScope = enclosingClassScope
   }
 
@@ -147,6 +161,15 @@ class StaticAnalysis(val interpreter: Interpreter) : Expr.Visitor<Unit>, Stmt.Vi
   override fun visitSetExpr(expr: Expr.Set) {
     resolve(expr.value)
     resolve(expr.obj)
+  }
+
+  override fun visitSuperExpr(expr: Expr.Super) {
+    if (curClassScope == ClassScope.NONE) {
+      Yellow.error(expr.keyword, "Can't use 'super' outside of a class")
+    } else if (curClassScope != ClassScope.SUBCLASS) {
+      Yellow.error(expr.keyword, "Can't use 'super' in a class with no superclass.")
+    }
+    resolveLocal(expr, expr.keyword)
   }
 
   override fun visitThisExpr(expr: Expr.This) {
