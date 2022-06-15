@@ -18,6 +18,13 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     globals.define("__print__", __print__)
     globals.define("__println__", __println__)
     globals.define("__input__", __input__)
+
+    globals.define("__list__", __list__)
+    globals.define("__list__append__", __list__append__)
+    globals.define("__list__get__", __list__get__)
+    globals.define("__list__set__", __list__set__)
+    globals.define("__list__delete__", __list__delete__)
+    globals.define("__list__len__", __list__len__)
   }
 
   fun interpret(statements: List<Stmt>) {
@@ -222,7 +229,11 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
             "Expected ${function.arity()} arguments but got ${arguments.size}"
         )
       }
-      return function.call(this, arguments)
+      try {
+        return function.call(this, arguments)
+      } catch (err: NativeFunctionError) {
+        throw RuntimeError(expr.paren, err.message!!)
+      }
     } else {
       throw RuntimeError(expr.paren, "can only call functions and classes.")
     }

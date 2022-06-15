@@ -1,0 +1,29 @@
+class List {
+  init() {
+    this.l = __list__();
+  }
+
+  append(elm) {
+    __list__append__(this.l, elm);
+  }
+
+  get(idx) {
+    return __list__get__(this.l, idx);
+  }
+
+  set(idx, elm) {
+    __list__set__(this.l, idx, elm);
+  }
+
+  delete(idx) {
+    return __list__delete__(this.l, idx);
+  }
+
+  len() {
+    return __list__len__(this.l);
+  }
+
+  print() {
+    _print(this.l);
+  }
+}
