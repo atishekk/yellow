@@ -14,7 +14,11 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
   private var environment = globals
 
   // Define <native functions> here
-  init {}
+  init {
+    globals.define("__print__", __print__)
+    globals.define("__println__", __println__)
+    globals.define("__input__", __input__)
+  }
 
   fun interpret(statements: List<Stmt>) {
     try {
@@ -103,7 +107,22 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
   }
 
   override fun visitImportStmt(stmt: Stmt.Import) {
-    println("Import/Run ${stmt.file} here")
+    if (stmt.file !is Expr.Literal && (stmt.file as Expr.Literal).value !is String) {
+      throw RuntimeError(stmt.token, "File name should be a string literal")
+    }
+    try {
+      val userDir = System.getProperty("user.home")
+      val file = ((stmt.file).value as String)
+      if (file.trim().startsWith("std:")) {
+        val filename = file.substring(4)
+        filename.trim()
+        Yellow.runFile("$userDir/.yellow/std/$filename.yellow")
+      } else {
+        throw RuntimeError(stmt.token, "Invalid import")
+      }
+    } catch (err: java.nio.file.NoSuchFileException) {
+      throw RuntimeError(stmt.token, "Can't find the import")
+    }
   }
 
   override fun visitPrintStmt(stmt: Stmt.Print) {

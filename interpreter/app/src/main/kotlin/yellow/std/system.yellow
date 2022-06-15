@@ -1,0 +1,17 @@
+// TODO: Work on blocking and non blocking file IO
+
+class __system__ {
+  print(str) {
+    __print__(str);
+  }
+
+  println(str) {
+    __println__(str);
+  }
+
+  input(prompt) {
+    return __input__(prompt);
+  }
+}
+
+var System = __system__();

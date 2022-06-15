@@ -65,7 +65,7 @@ abstract class Stmt {
     }
   }
 
-  class Import(val file: Expr) : Stmt() {
+  class Import(val file: Expr, val token: Token) : Stmt() {
     override fun <T> accept(visitor: Visitor<T>): T {
       return visitor.visitImportStmt(this)
     }

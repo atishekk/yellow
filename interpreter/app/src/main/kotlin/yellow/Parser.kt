@@ -149,9 +149,10 @@ class Parser(val tokens: List<Token>) {
   }
 
   private fun importStatement(): Stmt {
+    val keyword = previous
     val file = expression()
     consume(SEMICOLON, "Expect ';' after filename")
-    return Stmt.Import(file)
+    return Stmt.Import(file, keyword)
   }
 
   // TODO: Range based for loops
