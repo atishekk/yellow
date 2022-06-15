@@ -113,9 +113,31 @@ System.print(d.mammal);           // true
 #### Standard Library
 ```
 import "std:system";
+import "std:list";
 
+// Show the string prompt and capture the entered value
 var num = System.input("Enter a number: ");
 
-System.print(num)
+System.print(num) 
+
+var l = List();
+
+l.append(10);
+l.append("Hello");
+l.append(num);
+
+l.set(1, "Another Hello");
+
+l.print();      
+
+// list iteration
+for(var i = 0; i < l.len(); i = i + 1) {
+    System.println(l.get(i));
+}
+
+// clear the list
+while(l.len() > 0) {
+    l.delete(0);
+}
 ```
 
