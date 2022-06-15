@@ -4,36 +4,39 @@ yellow is a dynamically typed toy language.
 
 #### Dynamic Variable bindings
 ```
+import "std:system";
 var a = 10;
 var b = 20;
-print a + b;          // 30
+System.print(a + b);          // 30
 
 var a = "Hello";
 var b = "World";
-print a + ", " + b;   // Hello, World
+System.print( a + ", " + b);   // Hello, World
 ```
 
 #### Lexical Scoping
 ```
+import "std:system";
 var a = "a - outer";
 var b = "b - outer";
 
 {
-  print b;                          // b-outer
+  System.print(b);                          // b-outer
   var b = "b - inner";
-  print b;                          // b-inner
+  System.print(b);                          // b-inner
   {
-    print a;                        // a-outer
+    System.print(a);                        // a-outer
     var a = "a - inner inner";
-    print a;                        // a-inner inner
+    System.print(a);                        // a-inner inner
   }
 }
-print a;                            // a-outer
-print b;                            // b-outer
+System.print(a);                            // a-outer
+System.print(b);                            // b-outer
 ```
 
 #### Recursion
 ```
+import "std:system";
 // Fibonacci
 
 fun fibonacci(n) {
@@ -43,12 +46,13 @@ fun fibonacci(n) {
 }
 
 for(var i = 1; i < 20; i = i + 1) {
-    print fibonacci(i);
+    System.print(fibonacci(i));
 }
 ```
 
 #### Closures
 ```
+import "std:system";
 // Counter
 
 fun makeCounter() {
@@ -64,21 +68,22 @@ fun makeCounter() {
 
 var counter = makeCounter();
 
-print counter();    // 1
-print counter();    // 2
-print counter();    // 3
-print counter();    // 4
+System.print(counter());    // 1
+System.print(counter());    // 2
+System.print(counter());    // 3
+System.print(counter());    // 4
 
 ```
 #### Classes
 ```
+import "std:system";
 class Animal {
   init(mammal) {
     this.mammal = mammal;
   }
 
   info() {
-    print this.mammal;
+    System.print(this.mamma)l;
   }
 }
 
@@ -90,23 +95,27 @@ class Cat < Animal {
   }
 
   info() {
-    print "name: " + this.name;
+    System.print("name: " + this.name);
     super.info();
   }
 }
 
 
 var d = Cat("Pepper");
-print d;                  // <instance <class Cat>>
+System.print(d);                  // <instance <class Cat>>
 d.info();                 // name: Pepper
                           // true
 
-print d.name;             // Pepper
-print d.mammal;           // true
+System.print(d.name);             // Pepper
+System.print(d.mammal);           // true
 ```
 
 #### Standard Library
 ```
-  TODO()
+import "std:system";
+
+var num = System.input("Enter a number: ");
+
+System.print(num)
 ```
 
