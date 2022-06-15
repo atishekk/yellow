@@ -102,6 +102,10 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     }
   }
 
+  override fun visitImportStmt(stmt: Stmt.Import) {
+    println("Import/Run ${stmt.file} here")
+  }
+
   override fun visitPrintStmt(stmt: Stmt.Print) {
     val value = evaluate(stmt.expression)
     println(stringify(value))
@@ -132,6 +136,7 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     return value
   }
 
+  // Binary Operators
   override fun visitBinaryExpr(expr: Expr.Binary): Any? {
     val left = evaluate(expr.left)
     val right = evaluate(expr.right)

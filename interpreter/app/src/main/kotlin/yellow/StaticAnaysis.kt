@@ -94,6 +94,10 @@ class StaticAnalysis(val interpreter: Interpreter) : Expr.Visitor<Unit>, Stmt.Vi
     stmt.elseBranch?.let { resolve(it) }
   }
 
+  override fun visitImportStmt(stmt: Stmt.Import) {
+    resolve(stmt.file)
+  }
+
   override fun visitPrintStmt(stmt: Stmt.Print) {
     resolve(stmt.expression)
   }

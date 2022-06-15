@@ -46,6 +46,7 @@ enum class TokenType {
   TRUE,
   VAR,
   WHILE,
+  IMPORT,
 
   // END OF FILE
   EOF

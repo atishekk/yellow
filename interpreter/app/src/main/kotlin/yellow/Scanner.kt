@@ -42,6 +42,7 @@ class Scanner(private val source: String) {
             "true" to TRUE,
             "var" to VAR,
             "while" to WHILE,
+            "import" to IMPORT,
         )
   }
 

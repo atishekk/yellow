@@ -138,6 +138,7 @@ class Parser(val tokens: List<Token>) {
   //              | expressionStatement
   //              | blockStatement
   private fun statement(): Stmt {
+    if (match(IMPORT)) return importStatement()
     if (match(FOR)) return forStatement()
     if (match(IF)) return ifStatement()
     if (match(PRINT)) return printStatement()
@@ -145,6 +146,12 @@ class Parser(val tokens: List<Token>) {
     if (match(WHILE)) return whileStatement()
     if (match(LEFT_BRACE)) return Stmt.Block(block())
     return expressionStatement()
+  }
+
+  private fun importStatement(): Stmt {
+    val file = expression()
+    consume(SEMICOLON, "Expect ';' after filename")
+    return Stmt.Import(file)
   }
 
   // TODO: Range based for loops

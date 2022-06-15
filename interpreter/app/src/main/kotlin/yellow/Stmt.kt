@@ -7,6 +7,7 @@ abstract class Stmt {
     fun visitFunctionStmt(stmt: Function): T
     fun visitExpressionStmt(stmt: Expression): T
     fun visitIfStmt(stmt: If): T
+    fun visitImportStmt(stmt: Import): T
     fun visitPrintStmt(stmt: Print): T
     fun visitReturnStmt(stmt: Return): T
     fun visitVarStmt(stmt: Var): T
@@ -61,6 +62,12 @@ abstract class Stmt {
   ) : Stmt() {
     override fun <T> accept(visitor: Visitor<T>): T {
       return visitor.visitIfStmt(this)
+    }
+  }
+
+  class Import(val file: Expr) : Stmt() {
+    override fun <T> accept(visitor: Visitor<T>): T {
+      return visitor.visitImportStmt(this)
     }
   }
 
