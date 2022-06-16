@@ -12,7 +12,7 @@ val __print__ =
       }
 
       override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
-        print(args[0])
+        print(interpreter.stringify(args[0]))
         return null
       }
     }
@@ -24,7 +24,7 @@ val __println__ =
       }
 
       override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
-        println(args[0])
+        println(interpreter.stringify(args[0]))
         return null
       }
     }
@@ -36,7 +36,7 @@ val __input__ =
       }
 
       override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
-        print(args[0])
+        print(interpreter.stringify(args[0]))
         return readLine()
       }
     }

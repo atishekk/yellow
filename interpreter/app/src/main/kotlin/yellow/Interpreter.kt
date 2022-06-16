@@ -354,7 +354,7 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     }
   }
 
-  private fun stringify(obj: Any?): String {
+  public fun stringify(obj: Any?): String {
     if (obj == null) return "nil"
 
     if (obj is Double) {
