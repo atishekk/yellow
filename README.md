@@ -7,11 +7,11 @@ yellow is a dynamically typed toy language.
 import "std:system";
 var a = 10;
 var b = 20;
-System.print(a + b);          // 30
+System.println(a + b);          // 30
 
 var a = "Hello";
 var b = "World";
-System.print( a + ", " + b);   // Hello, World
+System.println( a + ", " + b);   // Hello, World
 ```
 
 #### Lexical Scoping
@@ -21,17 +21,17 @@ var a = "a - outer";
 var b = "b - outer";
 
 {
-  System.print(b);                          // b-outer
+  System.println(b);                          // b-outer
   var b = "b - inner";
-  System.print(b);                          // b-inner
+  System.println(b);                          // b-inner
   {
-    System.print(a);                        // a-outer
+    System.println(a);                        // a-outer
     var a = "a - inner inner";
-    System.print(a);                        // a-inner inner
+    System.println(a);                        // a-inner inner
   }
 }
-System.print(a);                            // a-outer
-System.print(b);                            // b-outer
+System.println(a);                            // a-outer
+System.println(b);                            // b-outer
 ```
 
 #### Recursion
@@ -46,7 +46,7 @@ fun fibonacci(n) {
 }
 
 for(var i = 1; i < 20; i = i + 1) {
-    System.print(fibonacci(i));
+    System.println(fibonacci(i));
 }
 ```
 
@@ -68,10 +68,10 @@ fun makeCounter() {
 
 var counter = makeCounter();
 
-System.print(counter());    // 1
-System.print(counter());    // 2
-System.print(counter());    // 3
-System.print(counter());    // 4
+System.println(counter());    // 1
+System.println(counter());    // 2
+System.println(counter());    // 3
+System.println(counter());    // 4
 
 ```
 #### Classes
@@ -83,7 +83,7 @@ class Animal {
   }
 
   info() {
-    System.print(this.mamma)l;
+    System.println(this.mamma)l;
   }
 }
 
@@ -95,19 +95,19 @@ class Cat < Animal {
   }
 
   info() {
-    System.print("name: " + this.name);
+    System.println("name: " + this.name);
     super.info();
   }
 }
 
 
 var d = Cat("Pepper");
-System.print(d);                  // <instance <class Cat>>
+System.println(d);                  // <instance <class Cat>>
 d.info();                 // name: Pepper
                           // true
 
-System.print(d.name);             // Pepper
-System.print(d.mammal);           // true
+System.println(d.name);             // Pepper
+System.println(d.mammal);           // true
 ```
 
 #### Standard Library
@@ -118,7 +118,7 @@ import "std:list";
 // Show the string prompt and capture the entered value
 var num = System.input("Enter a number: ");
 
-System.print(num) 
+System.println(num);
 
 var l = List();
 
@@ -132,12 +132,29 @@ l.print();
 
 // list iteration
 for(var i = 0; i < l.len(); i = i + 1) {
-    System.println(l.get(i));
+    System.printlnln(l.get(i));  
 }
 
 // clear the list
 while(l.len() > 0) {
     l.delete(0);
 }
+
+import "std:map";
+
+// HashMap - Only strings as keys :(
+
+var m = Map();
+m.set("int", 10);
+System.println(m.get("int"));   // 10
+System.println(m.get("key"));   // nil
+
+m.set("list", List());
+var l = m.get("list");    
+l.append("Hello");    
+l.append(20);
+System.println(m.get("list").get(1));     // 20
+System.println(m.get("list").get(0));     // Hello
+
 ```
 
