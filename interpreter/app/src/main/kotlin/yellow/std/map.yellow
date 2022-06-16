@@ -1,0 +1,21 @@
+class Map {
+  init() {
+    this.m = __map__();
+  }
+
+  set(key, value) {
+    __map__set__(this.m, key, value);
+  }
+
+  get(key) {
+    return __map__get__(this.m, key);
+  }
+
+  len() {
+    return __map__len__(this.m);
+  }
+
+  delete(key) {
+    return __map__delete(this.m, key);
+  }
+}

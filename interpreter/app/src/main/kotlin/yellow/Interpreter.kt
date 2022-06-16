@@ -25,6 +25,12 @@ class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     globals.define("__list__set__", __list__set__)
     globals.define("__list__delete__", __list__delete__)
     globals.define("__list__len__", __list__len__)
+
+    globals.define("__map__", __map__)
+    globals.define("__map__set__", __map__set__)
+    globals.define("__map__get__", __map__get__)
+    globals.define("__map__len__", __map__len__)
+    globals.define("__map__delete__", __map__delete__)
   }
 
   fun interpret(statements: List<Stmt>) {

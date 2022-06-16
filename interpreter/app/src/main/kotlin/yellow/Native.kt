@@ -4,6 +4,7 @@ package yellow
 
 class NativeFunctionError(message: String) : RuntimeException(message) {}
 
+// System Impl
 val __print__ =
     object : YellowCallable {
       override fun arity(): Int {
@@ -40,6 +41,7 @@ val __input__ =
       }
     }
 
+// List Impl
 val __list__ =
     object : YellowCallable {
 
@@ -51,7 +53,7 @@ val __list__ =
         return mutableListOf<Any?>()
       }
     }
-
+@Suppress("UNCHECKED_CAST")
 val __list__append__ =
     object : YellowCallable {
 
@@ -68,6 +70,7 @@ val __list__append__ =
       }
     }
 
+@Suppress("UNCHECKED_CAST")
 val __list__get__ =
     object : YellowCallable {
 
@@ -90,6 +93,7 @@ val __list__get__ =
       }
     }
 
+@Suppress("UNCHECKED_CAST")
 val __list__set__ =
     object : YellowCallable {
 
@@ -112,6 +116,7 @@ val __list__set__ =
       }
     }
 
+@Suppress("UNCHECKED_CAST")
 val __list__delete__ =
     object : YellowCallable {
 
@@ -134,6 +139,7 @@ val __list__delete__ =
       }
     }
 
+@Suppress("UNCHECKED_CAST")
 val __list__len__ =
     object : YellowCallable {
 
@@ -149,6 +155,110 @@ val __list__len__ =
             is java.lang.ClassCastException ->
                 throw NativeFunctionError("Invalid list len operation: Not a list object")
             else -> throw NativeFunctionError("Invalid list len operation")
+          }
+        }
+      }
+    }
+
+// Map Impl
+@Suppress("UNCHECKED_CAST")
+val __map__ =
+    object : YellowCallable {
+
+      override fun arity(): Int {
+        return 0
+      }
+
+      override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
+        return mutableMapOf<String, Any?>()
+      }
+    }
+
+@Suppress("UNCHECKED_CAST")
+val __map__set__ =
+    object : YellowCallable {
+
+      override fun arity(): Int {
+        return 3
+      }
+
+      override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
+        try {
+          if (args[1] !is String) {
+            throw NativeFunctionError("Invalid map set operation: Key not a string")
+          }
+          return (args[0] as MutableMap<String, Any?>).set(args[1] as String, args[2])
+        } catch (err: java.lang.ClassCastException) {
+          throw NativeFunctionError("Invalid map operation: Not a map object")
+        }
+      }
+    }
+
+@Suppress("UNCHECKED_CAST")
+val __map__get__ =
+    object : YellowCallable {
+
+      override fun arity(): Int {
+        return 2
+      }
+
+      override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
+        try {
+          if (args[1] !is String) {
+            throw NativeFunctionError("Invalid map get operation: Key not a string")
+          }
+          return (args[0] as MutableMap<String, Any?>).get((args[1] as String))
+        } catch (err: Exception) {
+          when (err) {
+            is java.lang.ClassCastException ->
+                throw NativeFunctionError("Invalid map get operation: Not a map object")
+            else -> throw NativeFunctionError("Invalid map get operation")
+          }
+        }
+      }
+    }
+
+@Suppress("UNCHECKED_CAST")
+val __map__len__ =
+    object : YellowCallable {
+
+      override fun arity(): Int {
+        return 1
+      }
+
+      override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
+        try {
+          return (args[0] as MutableMap<String, Any?>).size.toDouble()
+        } catch (err: Exception) {
+          when (err) {
+            is java.lang.ClassCastException ->
+                throw NativeFunctionError("Invalid map len operation: Not a map object")
+            else -> throw NativeFunctionError("Invalid map len operation")
+          }
+        }
+      }
+    }
+
+@Suppress("UNCHECKED_CAST")
+val __map__delete__ =
+    object : YellowCallable {
+
+      override fun arity(): Int {
+        return 2
+      }
+
+      override fun call(interpreter: Interpreter, args: List<Any?>): Any? {
+        try {
+
+          if (args[1] !is String) {
+            throw NativeFunctionError("Invalid map delete operation: Key not a string")
+          }
+          return (args[0] as MutableMap<String, Any?>).remove(args[1] as String)
+        } catch (err: Exception) {
+          when (err) {
+            is java.lang.ClassCastException ->
+                throw NativeFunctionError("Invalid map delete operation: Not a map object")
+            else -> throw NativeFunctionError("Invalid map delete operation")
           }
         }
       }
